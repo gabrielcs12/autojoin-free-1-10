@@ -5,11 +5,11 @@ import re
 app = Flask(__name__)
 CORS(app)
 
-jobs = []
+pets = []
 
-@app.route("/jobs")
-def get_jobs():
-    return jsonify(jobs)
+@app.route("/pets")
+def get_pets():
+    return jsonify(pets)
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -17,13 +17,12 @@ def webhook():
     content = data.get("content", "")
     job_ids = re.findall(r"[0-9a-fA-F\-]{36}", content)
     if job_ids:
-        for job_id in job_ids:
-            job_entry = {
-                "job_id": job_id,
-                "money": 10_000_000  # Exemplo fixo acima de 9M
-            }
-            jobs.append(job_entry)
-            print("✅ Novo Job recebido:", job_entry)
+        new_pet = {
+            "content": content,
+            "job_ids": job_ids
+        }
+        pets.append(new_pet)
+        print("✅ Novo pet adicionado:", new_pet)
     return "", 204
 
 if __name__ == "__main__":
